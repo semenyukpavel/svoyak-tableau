@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLCDNumber
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 
 
 class SvoyakTableau(QWidget):
@@ -13,6 +14,10 @@ class SvoyakTableau(QWidget):
         self.initUI()
 
     def initUI(self):
+
+        self.themes = ['Тема ' + str(i+1) for i in range(5)]
+        self.quests = ['10', '20', '30', '40', '50']
+
         btn_plus_p1 = QPushButton('Игрок 1 +', self)
         btn_plus_p2 = QPushButton('Игрок 2 +', self)
         btn_plus_p3 = QPushButton('Игрок 3 +', self)
@@ -46,6 +51,25 @@ class SvoyakTableau(QWidget):
         self.pts3.move(550, 150)
         self.pts4.move(700, 150)
 
+        self.themeN = QLabel(self)
+        self.questN = QLabel(self)
+
+        self.theme_num = 0
+        self.quest_num = 0
+
+        self.themeN.setText(self.themes[self.theme_num])
+        self.questN.setText(self.quests[self.quest_num])
+
+        self.themeN.setAlignment(Qt.AlignHCenter)
+        self.questN.setAlignment(Qt.AlignHCenter)
+
+        self.themeN.move(425, 350)
+        self.questN.move(425, 400)
+
+        next_q_btn = QPushButton('Следующий вопрос', self)
+
+        next_q_btn.move(375, 450)
+
         btn_plus_p1.clicked.connect(self.buttonClicked)
         btn_plus_p2.clicked.connect(self.buttonClicked)
         btn_plus_p3.clicked.connect(self.buttonClicked)
@@ -54,6 +78,8 @@ class SvoyakTableau(QWidget):
         btn_minus_p2.clicked.connect(self.buttonClicked)
         btn_minus_p3.clicked.connect(self.buttonClicked)
         btn_minus_p4.clicked.connect(self.buttonClicked)
+
+        next_q_btn.clicked.connect(self.qButtonClicked)
 
         self.setGeometry(200, 200, 900, 500)
         self.setWindowTitle('Табло для Своей игры')
@@ -64,37 +90,55 @@ class SvoyakTableau(QWidget):
         if sender_txt[-1] == '+':
             if sender_txt[-3] == '1':
                 res = self.pts1.intValue()
-                self.pts1.display(res + 10)
+                self.pts1.display(res + int(self.questN.text()))
                 self.pts1.repaint()
             elif sender_txt[-3] == '2':
                 res = self.pts2.intValue()
-                self.pts2.display(res + 10)
+                self.pts2.display(res + int(self.questN.text()))
                 self.pts2.repaint()
             elif sender_txt[-3] == '3':
                 res = self.pts3.intValue()
-                self.pts3.display(res + 10)
+                self.pts3.display(res + int(self.questN.text()))
                 self.pts3.repaint()
             elif sender_txt[-3] == '4':
                 res = self.pts4.intValue()
-                self.pts4.display(res + 10)
+                self.pts4.display(res + int(self.questN.text()))
                 self.pts4.repaint()
         elif sender_txt[-1] == '-':
             if sender_txt[-3] == '1':
                 res = self.pts1.intValue()
-                self.pts1.display(res - 10)
+                self.pts1.display(res - int(self.questN.text()))
                 self.pts1.repaint()
             elif sender_txt[-3] == '2':
                 res = self.pts2.intValue()
-                self.pts2.display(res - 10)
+                self.pts2.display(res - int(self.questN.text()))
                 self.pts2.repaint()
             elif sender_txt[-3] == '3':
                 res = self.pts3.intValue()
-                self.pts3.display(res - 10)
+                self.pts3.display(res - int(self.questN.text()))
                 self.pts3.repaint()
             elif sender_txt[-3] == '4':
                 res = self.pts4.intValue()
-                self.pts4.display(res - 10)
+                self.pts4.display(res - int(self.questN.text()))
                 self.pts4.repaint()
+
+    def qButtonClicked(self):
+        if self.quest_num < 4:
+            self.quest_num += 1
+            self.questN.setText(self.quests[self.quest_num])
+            self.questN.repaint()
+        elif self.theme_num < 4:
+            self.theme_num += 1
+            self.quest_num -= 4
+            self.themeN.setText(self.themes[self.theme_num])
+            self.questN.setText(self.quests[self.quest_num])
+            self.questN.repaint()
+            self.themeN.repaint()
+        else:
+            self.themeN.setText('Тема 0')
+            self.questN.setText('0')
+            self.questN.repaint()
+            self.themeN.repaint()
 
 
 if __name__ == '__main__':
