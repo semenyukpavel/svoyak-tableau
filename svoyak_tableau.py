@@ -71,13 +71,14 @@ class SvoyakTableau(QWidget):
 
         widgets = [self.p1, self.p2, self.p3, self.p4, self.pts1, self.pts2,
                    self.pts3, self.pts4, self.themeN, self.questN, btn_plus_p1,
-                   btn_plus_p2, btn_plus_p3, btn_plus_p4, btn_minus_p1, btn_minus_p2,
-                   btn_minus_p3, btn_minus_p4, next_q_btn]
+                   btn_plus_p2, btn_plus_p3, btn_plus_p4, btn_minus_p1,
+                   btn_minus_p2, btn_minus_p3, btn_minus_p4, next_q_btn]
 
         for widget in widgets:
             widget.resize(widget.sizeHint())
-            if widget in [self.p1, self.p2, self.p3, self.p4, self.themeN, self.questN,
-                          self.pts1, self.pts2, self.pts3, self.pts4]:
+            if widget in [self.p1, self.p2, self.p3, self.p4, self.themeN,
+                          self.questN, self.pts1, self.pts2,
+                          self.pts3, self.pts4]:
                 widget.setAlignment(Qt.AlignCenter)
 
         grid = QGridLayout()
@@ -173,7 +174,8 @@ class SvoyakTableau(QWidget):
     #     self.show()
     #
     # def start_clicked(self):
-    #     return [self.player1.text(), self.player2.text(), self.player3.text(), self.player4.text()]
+    #     return [self.player1.text(), self.player2.text(),
+    #             self.player3.text(), self.player4.text()]
 
 
 if __name__ == '__main__':
