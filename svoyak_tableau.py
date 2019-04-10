@@ -13,9 +13,24 @@ class SvoyakTableau(QWidget):
 
         self.initUI()
 
+    def getText(self):
+        text, okPressed = QInputDialog.getText(self, "Игроки", "Введите игроков через запятую:", QLineEdit.Normal, "")
+        if okPressed and text != '':
+            return text
+
     def initUI(self):
 
-        self.themes = ['Тема ' + str(i+1) for i in range(5)]
+        while True:
+            player_names = self.getText().split(',')
+            if len(player_names) == 4:
+                break
+            error_dialog = QErrorMessage()
+            error_dialog.showMessage('Количество игроков не равно 4, введите заново')
+
+
+        theme_num = 5
+
+        self.themes = ['Тема ' + str(i+1) for i in range(theme_num)]
         self.quests = ['10', '20', '30', '40', '50']
 
         self.p1 = QLabel(self)
@@ -23,10 +38,13 @@ class SvoyakTableau(QWidget):
         self.p3 = QLabel(self)
         self.p4 = QLabel(self)
 
-        self.p1.setText('Игрок 1')
-        self.p2.setText('Игрок 2')
-        self.p3.setText('Игрок 3')
-        self.p4.setText('Игрок 4')
+        for name in player_names:
+            name.strip()
+
+        self.p1.setText(player_names[0])
+        self.p2.setText(player_names[1])
+        self.p3.setText(player_names[2])
+        self.p4.setText(player_names[3])
 
         btn_plus_p1 = QPushButton('Игрок 1 +', self)
         btn_plus_p2 = QPushButton('Игрок 2 +', self)
@@ -161,21 +179,6 @@ class SvoyakTableau(QWidget):
             self.questN.setText('0')
             self.questN.repaint()
             self.themeN.repaint()
-
-    # TODO
-    # def startGame(self):
-    #     d = QDialog()
-    #     player1 = QLineEdit(d)
-    #     player2 = QLineEdit(d)
-    #     player3 = QLineEdit(d)
-    #     player4 = QLineEdit(d)
-    #     start_button = QPushButton('Старт', d)
-    #     start_button.clicked.connect(self.start_clicked)
-    #     self.show()
-    #
-    # def start_clicked(self):
-    #     return [self.player1.text(), self.player2.text(),
-    #             self.player3.text(), self.player4.text()]
 
 
 if __name__ == '__main__':
