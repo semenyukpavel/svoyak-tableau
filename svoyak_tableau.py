@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QInputDialog, QLineEdit, QErrorMessage, QLabel, QPushButton, QGridLayout, QApplication,\
+    QWidget
 
 
 class SvoyakTableau(QWidget):
@@ -15,20 +15,20 @@ class SvoyakTableau(QWidget):
 
     def getText(self):
         text, okPressed = QInputDialog.getText(self, "Игроки", "Введите игроков через запятую:", QLineEdit.Normal, "")
-        if okPressed and text != '':
+        if okPressed:
             return text
 
     def initUI(self):
 
         while True:
-            player_names = self.getText().split(',')
+            player_names = list(map(str.strip, self.getText().split(',')))
             if len(player_names) == 4:
                 break
             error_dialog = QErrorMessage()
             error_dialog.showMessage('Количество игроков не равно 4, введите заново')
 
-
         theme_num = 5
+        # TODO сделать переменное количество игр
 
         self.themes = ['Тема ' + str(i+1) for i in range(theme_num)]
         self.quests = ['10', '20', '30', '40', '50']
@@ -45,6 +45,9 @@ class SvoyakTableau(QWidget):
         self.p2.setText(player_names[1])
         self.p3.setText(player_names[2])
         self.p4.setText(player_names[3])
+
+        self.players_numbers = {player_names[0]: '1', player_names[1]: '2', player_names[2]: '3', player_names[3]: '4'}
+        # TODO намаппить имена с кнопками
 
         btn_plus_p1 = QPushButton(player_names[0] + ' +', self)
         btn_plus_p2 = QPushButton(player_names[1] + ' +', self)
@@ -127,37 +130,39 @@ class SvoyakTableau(QWidget):
 
     def buttonClicked(self):
         sender_txt = self.sender().text()
+        print(sender_txt)
+        sender_name = sender_txt.split(' ')[0] + ' ' + sender_txt.split(' ')[1]
         if sender_txt[-1] == '+':
-            if sender_txt[-3] == '1':
+            if self.players_numbers[sender_name] == '1':
                 res = int(self.pts1.text())
                 self.pts1.setText(str(res + int(self.questN.text())))
                 self.pts1.repaint()
-            elif sender_txt[-3] == '2':
+            elif self.players_numbers[sender_name] == '2':
                 res = int(self.pts2.text())
                 self.pts2.setText(str(res + int(self.questN.text())))
                 self.pts2.repaint()
-            elif sender_txt[-3] == '3':
+            elif self.players_numbers[sender_name] == '3':
                 res = int(self.pts3.text())
                 self.pts3.setText(str(res + int(self.questN.text())))
                 self.pts3.repaint()
-            elif sender_txt[-3] == '4':
+            elif self.players_numbers[sender_name] == '4':
                 res = int(self.pts4.text())
                 self.pts4.setText(str(res + int(self.questN.text())))
                 self.pts4.repaint()
         elif sender_txt[-1] == '-':
-            if sender_txt[-3] == '1':
+            if self.players_numbers[sender_name] == '1':
                 res = int(self.pts1.text())
                 self.pts1.setText(str(res - int(self.questN.text())))
                 self.pts1.repaint()
-            elif sender_txt[-3] == '2':
+            elif self.players_numbers[sender_name] == '2':
                 res = int(self.pts2.text())
                 self.pts2.setText(str(res - int(self.questN.text())))
                 self.pts2.repaint()
-            elif sender_txt[-3] == '3':
+            elif self.players_numbers[sender_name] == '3':
                 res = int(self.pts3.text())
                 self.pts3.setText(str(res - int(self.questN.text())))
                 self.pts3.repaint()
-            elif sender_txt[-3] == '4':
+            elif self.players_numbers[sender_name] == '4':
                 res = int(self.pts4.text())
                 self.pts4.setText(str(res - int(self.questN.text())))
                 self.pts4.repaint()
